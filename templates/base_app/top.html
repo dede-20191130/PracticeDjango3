@@ -12,9 +12,9 @@
                     <div class="ui divided items">
                         {% for topic in topic_list %}
                             <div class="item">
-                                    <div class="header">
-                                <div class="content">
-                                        <a href=""><h4>{{ topic.title }}</h4></a>
+                                <div class="header">
+                                    <div class="content">
+                                        <a href="{% url 'thread:topic' pk=topic.pk %}"><h4>{{ topic.title }}</h4></a>
                                     </div>
                                     <div class="meta">
                                         <span class="name">{{ topic.user_name }}</span>
