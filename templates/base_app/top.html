@@ -14,11 +14,12 @@
                             <div class="item">
                                 <div class="header">
                                     <div class="content">
-                                        <a href="{% url 'thread:topic' pk=topic.pk %}"><h4>{{ topic.title }}</h4></a>
+                                        <a href="{% url 'thread:topic' pk=topic.pk %}">
+                                            <h4>{{ topic.title | linebreaksbr }}</h4></a>
                                     </div>
                                     <div class="meta">
-                                        <span class="name">{{ topic.user_name }}</span>
-                                        <span class="date">{{ topic.created }}</span>
+                                        <span class="name">{{ topic.user_name | linebreaksbr }}</span>
+                                        <span class="date">{{ topic.created | linebreaksbr }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -12,3 +12,9 @@ class TopicCreateForm(ModelForm):
             'category',
             'message',
         ]
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '：')
+        super().__init__(*args, **kwargs)
+        self.fields['category'].empty_label = '選択してください。'
+        self.fields['user_name'].widget.attrs['value'] = '山田太郎'
