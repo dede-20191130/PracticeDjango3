@@ -1,6 +1,7 @@
 {% extends 'base_app/base.html' %}
 {% block title %}トピック作成 - {{ block.super }}{% endblock %}
 {% block content %}
+    {% load threadfilters %}
     <div class="ui grid stackable">
         <div class="eleven wide column">
             <div class="ui breadcrumb">
@@ -31,7 +32,7 @@
                             <p>{{ comment.no }}. {{ comment.user_name }}<br>{{ comment.created }}</p>
                             {% if comment.pub_flg %}
                                 <p>
-                                <pre>&gt:{{ comment.message | linebreaksbr }}</pre></p>
+                                    &gt:{{ comment.message  | comment_filter | safe }}</p>
                             {% else %}
                                 <p style="color: #aaa">このコメントは非表示となりました。</p>
                             {% endif %}
