@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, CreateView, ListView
@@ -60,6 +61,8 @@ class TopicCreateView(CreateView):
 class CategoryView(ListView):
     template_name = 'thread/category.html'
     context_object_name = 'topic_list'
+    paginate_by = 1
+    page_kwarg = 'p'
 
     def get_queryset(self):
         return Topic.objects.filter(category__url_code=self.kwargs['url_code'])
@@ -89,5 +92,5 @@ class TopicAndCommentView(FormView):
         ctx = super().get_context_data()
         ctx['topic'] = Topic.objects.get(id=self.kwargs['pk'])
         ctx['comment_list'] = Comment.objects.filter(
-            topic_id=self.kwargs['pk']).order_by('no')
+            topic_id=self.kwargs['pk']).annotate(vote_count=Count('vote')).order_by('no')
         return ctx

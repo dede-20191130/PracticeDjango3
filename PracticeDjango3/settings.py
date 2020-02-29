@@ -26,7 +26,8 @@ SECRET_KEY = 'rv+!)l7)51j+0wjo&1pm__p94&ry-74e)7nuks@v#h(x^8_x=2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*",
+                 ]
 
 # Application definition
 
@@ -39,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'base_app.apps.BaseAppConfig',
-    'thread_app.apps.ThreadAppConfig'
+    'thread_app.apps.ThreadAppConfig',
+    'api.apps.ApiConfig',
+    'search_app.apps.SearchAppConfig',
 ]
 
 INTERNAL_IPS = [

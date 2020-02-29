@@ -21,8 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base_app.urls')),
     path('thread/', include('thread_app.urls')),
+    path('api/', include('api.urls')),
+    path('search/', include('search_app.urls')),
 ]
-
 
 if settings.DEBUG:
     import debug_toolbar
