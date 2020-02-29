@@ -15,10 +15,21 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
+
+from base_app.sitemap import BaseSitemap
+from thread_app.sitemap import TopicSitemap, CategorySitemap
+
+sitemaps = {
+    'topic': TopicSitemap,
+    'cateogry': CategorySitemap,
+    'base': BaseSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('', include('base_app.urls')),
     path('thread/', include('thread_app.urls')),
     path('api/', include('api.urls')),
