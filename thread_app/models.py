@@ -4,7 +4,18 @@ from django.contrib.auth.models import User
 
 class TopicManager(models.Manager):
     # Topic操作に関する処理を追加
-    pass
+    def create_topic(self, title, user_name, category_id, message):
+        topic = self.model(
+            title=title,
+            user_name=user_name,
+            category_id=category_id,
+            message=message,
+        )
+        try:
+            topic.save()
+        except:
+            return False
+        return True
 
 
 class CommentManager(models.Manager):
