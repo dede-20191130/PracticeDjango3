@@ -1,5 +1,6 @@
 <div class="ui relaxed list small divided link">
     {% for category in category_list %}
-        <a class="item">{{ category.name }}({{ category.count }})</a>
+        <a href="{% url 'thread:category' url_code=category.url_code %}"
+           class="item">{{ category.name }}({{ category.count }})</a>
     {% endfor %}
 </div>

@@ -12,7 +12,7 @@
                 <div class="content">
                     <div class="header"><h3>トピック作成</h3></div>
                     <p>内容を確認してください</p>
-                    <table class="ui celled table table table-hover">
+                    <table class="ui celled fixed table table table-hover">
                         <tr>
                             <td>タイトル</td>
                             <td>{{ form.title.value }}</td>
@@ -28,7 +28,7 @@
                         <tr>
                             <td>本文</td>
                             <td>
-                                <pre>{{ form.message.value }}</pre>
+                                {{ form.message.value | linebreaksbr}}
                             </td>
                         </tr>
                     </table>

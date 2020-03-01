@@ -1,5 +1,7 @@
+from django.core.mail import send_mail, EmailMessage
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, CreateView, ListView
 
@@ -26,6 +28,31 @@ class TopicCreateView(CreateView):
         if self.request.POST.get('next', '') == 'back':
             return render(self.request, 'thread/create_topic.html', ctx)
         if self.request.POST.get('next', '') == 'create':
+            # メール送信処理
+            template = get_template('thread/mail/topic_mail.html')
+            mail_ctx = {
+                'title': form.data['title'],
+                'user_name': form.data['user_name'],
+                'message': form.data['message'],
+            }
+            EmailMessage(
+                subject='トピック作成: ' + form.data['title'],
+                body=template.render(mail_ctx),
+                from_email='hogehoge@example.com',
+                to=['admin@example.com'],
+                cc=['admin2@example.com'],
+                bcc=['admin3@example.com'],
+            ).send()
+
+            # send_mail(
+            #     subject='トピック作成: ' + form.data['title'],
+            #     message=template.render(mail_ctx),
+            #     from_email='hogehoge@example.com',
+            #     recipient_list=[
+            #         'admin@example.com',
+            #     ]
+            # )
+
             return super().form_valid(form)
         else:
             # 正常動作ではここは通らない。エラーページへの遷移でも良い
@@ -61,7 +88,7 @@ class TopicCreateView(CreateView):
 class CategoryView(ListView):
     template_name = 'thread/category.html'
     context_object_name = 'topic_list'
-    paginate_by = 1
+    paginate_by = 2
     page_kwarg = 'p'
 
     def get_queryset(self):
