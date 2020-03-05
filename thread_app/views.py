@@ -79,9 +79,14 @@ class TopicCreateViewBySession(FormView):
                     category_id=request.session['input_data']['category'],
                     message=request.session['input_data']['message']
                 )
-                request.session.pop('input_data')  # セッションに保管した情報の削除
                 # メール送信処理は省略
-                return redirect(reverse_lazy('base:top'))
+
+                # Cookieにデータ格納
+                response = redirect(reverse_lazy('base:top'))
+                response.set_cookie('categ_id', request.session['input_data']['category'])
+                request.session.pop('input_data')  # セッションに保管した情報の削除
+
+                return response
         elif request.POST.get('next', '') == 'confirm':
             form = TopicCreateForm(request.POST)
             if form.is_valid():
@@ -98,6 +103,14 @@ class TopicCreateViewBySession(FormView):
                 return render(request, 'thread/confirm_topic.html', ctx)
             else:
                 return render(request, self.template_name, {'form': form})
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        if 'categ_id' in self.request.COOKIES:
+            form = ctx['form']
+            form['category'].field.initial = self.request.COOKIES['categ_id']
+            ctx['form'] = form
+        return ctx
 
 
 # class TopicFormView(FormView):
@@ -146,11 +159,20 @@ class TopicAndCommentView(FormView):
     form_class = CommentModelForm
 
     def form_valid(self, form):
+        # ①
         # comment = form.save(commit=False)  # 保存せずオブジェクト生成する
         # comment.topic = Topic.objects.get(id=self.kwargs['pk'])
         # comment.no = Comment.objects.filter(topic=self.kwargs['pk']).count() + 1
         # comment.save()
-        form.save_with_topic(self.kwargs['pk'])
+        # ②
+        # form.save_with_topic(self.kwargs['pk'])
+        # ③
+        Comment.objects.create_comment(
+            user_name=form.cleaned_data['user_name'],
+            message=form.cleaned_data['message'],
+            topic_id=self.kwargs['pk'],
+            image=form.cleaned_data['image']
+        )
         return super().form_valid(form)
 
     def get_success_url(self):

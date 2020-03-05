@@ -26,6 +26,7 @@ class CommentModelForm(ModelForm):
         fields = [
             'user_name',
             'message',
+            'image',
         ]
 
     def __init__(self, *args, **kwargs):

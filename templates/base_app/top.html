@@ -15,7 +15,13 @@
                                 <div class="header">
                                     <div class="content">
                                         <a href="{% url 'thread:topic' pk=topic.pk %}">
-                                            <h4>{{ topic.title | linebreaksbr }}</h4></a>
+                                            <h4>
+                                                {% if topic.id in new_list %}
+                                                    <span class="ui yellow horizontal label">new</span>
+                                                {% endif %}
+                                                {{ topic.title | linebreaksbr }}
+                                            </h4>
+                                        </a>
                                     </div>
                                     <div class="meta">
                                         <span class="name">{{ topic.user_name | linebreaksbr }}</span>
