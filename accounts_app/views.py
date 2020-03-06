@@ -1,16 +1,21 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordChangeDoneView, \
+    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 
-from accounts_app.forms import UserChangeForm
+from accounts_app.forms import UserChangeForm, CustomUserCreationForm, EmailChangeForm, CustomAuthenticationForm, \
+    CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
+from accounts_app.models import User
 
 
 class UserCreateView(FormView):
-    form_class = UserCreationForm
+    # form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     template_name = 'registration/create.html'
     success_url = reverse_lazy('accounts:profile')
 
@@ -42,6 +47,25 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return User.objects.get(id=self.request.user.id)
 
 
+class EmailChangeView(LoginRequiredMixin, FormView):
+    template_name = 'registration/change.html'
+    form_class = EmailChangeForm
+    success_url = reverse_lazy('accounts:profile')
+
+    def form_valid(self, form):
+        # formのupdateメソッドにログインユーザーを渡して更新
+        form.update(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # 更新前のユーザー情報をkwargsとして渡す
+        kwargs.update({
+            'email': self.request.user.email,
+        })
+        return kwargs
+
+
 class UserChangeView(LoginRequiredMixin, FormView):
     template_name = 'registration/change.html'
     form_class = UserChangeForm
@@ -61,3 +85,47 @@ class UserChangeView(LoginRequiredMixin, FormView):
             'last_name': self.request.user.last_name,
         })
         return kwargs
+
+
+class CustomLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+
+
+class CustomLogoutView(LogoutView):
+    template_name = 'registration/logged_out.html'
+    next_page = '/'
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    template_name = 'registration/password_change_form.html'
+    success_url = reverse_lazy('accounts:password_change_done')
+
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'registration/password_change_done.html'
+
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'registration/password_reset_email.html'
+    form_class = CustomPasswordResetForm
+    from_email = 'info@example.com'
+    subject_template_name = 'registration/password_reset_subject.txt'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    template_name = 'registration/password_reset_form.html'
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomSetPasswordForm
+    post_reset_login = False
+    post_reset_login_backend = None
+    success_url = reverse_lazy('accounts:password_reset_complete')
+    template_name = 'registration/password_reset_confirm.html'
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'registration/password_reset_complete.html'
