@@ -51,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Django標準のUserをベースにカスタマイズしたUserクラス
     """
+    DoseNotExist = None
     username_validator = UnicodeUsernameValidator()
     # python3で半角英数のみ許容する場合はASCIIUsernameValidatorを用いる
     # username_validator = ASCIIUsernameValidator()

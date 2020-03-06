@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 
 from accounts_app.forms import UserChangeForm, CustomUserCreationForm, EmailChangeForm, CustomAuthenticationForm, \
-    CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
+    CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm, EmailAuthenticationForm
 from accounts_app.models import User
 
 
@@ -88,7 +88,8 @@ class UserChangeView(LoginRequiredMixin, FormView):
 
 
 class CustomLoginView(LoginView):
-    form_class = CustomAuthenticationForm
+    # form_class = CustomAuthenticationForm
+    form_class = EmailAuthenticationForm
 
 
 class CustomLogoutView(LogoutView):
