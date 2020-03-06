@@ -36,7 +36,6 @@ urlpatterns = [
                   path('api/', include('api.urls')),
                   path('search/', include('search_app.urls')),
                   path('accounts/', include('accounts_app.urls')),
-                  path('accounts/', include('django.contrib.auth.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
