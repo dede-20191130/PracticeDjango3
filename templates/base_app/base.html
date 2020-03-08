@@ -12,7 +12,7 @@
     </title>
 </head>
 <body>
-<div class="ui stackable inverted menu">
+<div class="ui stackable inverted menu fixed">
     <a href="{% url 'base:top' %}" class="header item">
         IT学習ちゃんねる
     </a>
@@ -37,7 +37,7 @@
     {% block content %}
     {% endblock %}
 </div>
-<div class="ui inverted stackable footer segment">
+<div class="ui inverted stackable footer segment fixed">
     <div class="ui container center aligned">
         <div class="ui horizontal inverted small divided link list">
             <a href="{% url 'base:top' %}" class="item">© 2019 IT学習ちゃんねる(仮)</a>
